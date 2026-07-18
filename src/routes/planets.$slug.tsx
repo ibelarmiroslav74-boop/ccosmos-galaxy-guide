@@ -69,11 +69,10 @@ function PlanetPage() {
           <p className="mt-5 text-lg text-muted-foreground leading-relaxed">{p.intro[lang]}</p>
         </div>
 
-        <div className="glass-strong rounded-3xl p-2 aspect-square max-w-[520px] w-full mx-auto overflow-hidden">
+        <div className="panel rounded-3xl p-2 aspect-square max-w-[520px] w-full mx-auto overflow-hidden">
           <ClientOnly fallback={<div className="h-full w-full grid place-items-center text-muted-foreground text-sm">Loading 3D…</div>}>
             <Planet3D
-              color={p.color}
-              accent={p.accent}
+              slug={p.slug}
               hasRings={p.hasRings}
               className="h-full w-full rounded-2xl overflow-hidden"
             />
