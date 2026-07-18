@@ -16,7 +16,7 @@ export const Route = createFileRoute("/")({
         content:
           "3D-модели планет, интерактивная карта галактик и глубокие статьи о космосе. Открытая энциклопедия на русском и английском.",
       },
-      { property: "og:title", content: "ccosmos.space" },
+      { property: "og:title", content: "ccosmos.space — энциклопедия космоса" },
       { property: "og:url", content: "/" },
     ],
     links: [{ rel: "canonical", href: "/" }],
