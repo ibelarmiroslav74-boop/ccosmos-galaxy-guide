@@ -1,69 +1,69 @@
 import { Suspense, useRef } from "react";
-import { Canvas, useFrame } from "@react-three/fiber";
+import { Canvas, useFrame, useLoader } from "@react-three/fiber";
 import { OrbitControls, Stars } from "@react-three/drei";
-import type { Mesh } from "three";
-import { AdditiveBlending, DoubleSide } from "three";
+import { TextureLoader, DoubleSide, SRGBColorSpace, type Mesh } from "three";
+import { planetTextures, saturnRingTexture } from "@/lib/planet-textures";
 
 interface Props {
-  color: string;
-  accent: string;
+  slug: string;
   hasRings?: boolean;
   className?: string;
+  autoRotate?: boolean;
 }
 
-function Sphere({ color, accent }: { color: string; accent: string }) {
+function Sphere({ url, tilt = 0 }: { url: string; tilt?: number }) {
   const ref = useRef<Mesh>(null);
+  const tex = useLoader(TextureLoader, url);
+  tex.colorSpace = SRGBColorSpace;
   useFrame((_, delta) => {
-    if (ref.current) ref.current.rotation.y += delta * 0.15;
+    if (ref.current) ref.current.rotation.y += delta * 0.08;
   });
   return (
-    <group>
-      <mesh ref={ref}>
-        <sphereGeometry args={[1.4, 96, 96]} />
-        <meshStandardMaterial
-          color={color}
-          roughness={0.85}
-          metalness={0.15}
-          emissive={accent}
-          emissiveIntensity={0.08}
-        />
-      </mesh>
-      {/* atmosphere glow */}
-      <mesh scale={1.08}>
-        <sphereGeometry args={[1.4, 64, 64]} />
-        <meshBasicMaterial color={accent} transparent opacity={0.12} blending={AdditiveBlending} />
-      </mesh>
-    </group>
-  );
-}
-
-function Rings({ accent }: { accent: string }) {
-  const ref = useRef<Mesh>(null);
-  useFrame((_, delta) => {
-    if (ref.current) ref.current.rotation.z += delta * 0.03;
-  });
-  return (
-    <mesh ref={ref} rotation={[Math.PI / 2.3, 0, 0]}>
-      <ringGeometry args={[1.9, 2.9, 128]} />
-      <meshBasicMaterial color={accent} side={DoubleSide} transparent opacity={0.55} />
+    <mesh ref={ref} rotation={[0, 0, tilt]}>
+      <sphereGeometry args={[1.5, 128, 128]} />
+      <meshStandardMaterial map={tex} roughness={1} metalness={0} />
     </mesh>
   );
 }
 
-export function Planet3D({ color, accent, hasRings, className }: Props) {
+function Rings() {
+  const ref = useRef<Mesh>(null);
+  const tex = useLoader(TextureLoader, saturnRingTexture);
+  tex.colorSpace = SRGBColorSpace;
+  useFrame((_, delta) => {
+    if (ref.current) ref.current.rotation.z += delta * 0.02;
+  });
+  return (
+    <mesh ref={ref} rotation={[Math.PI / 2.2, 0, 0]}>
+      <ringGeometry args={[2.05, 3.2, 128]} />
+      <meshBasicMaterial map={tex} side={DoubleSide} transparent opacity={0.9} />
+    </mesh>
+  );
+}
+
+export function Planet3D({ slug, hasRings, className, autoRotate = true }: Props) {
+  const url = planetTextures[slug];
+  const tilt = slug === "uranus" ? Math.PI / 2 : slug === "earth" ? 0.41 : 0.15;
+
   return (
     <div className={className}>
-      <Canvas camera={{ position: [0, 0.6, 4.5], fov: 45 }} dpr={[1, 2]}>
-        <color attach="background" args={["#0a0f1f"]} />
-        <ambientLight intensity={0.35} />
-        <directionalLight position={[5, 3, 5]} intensity={1.3} color="#ffffff" />
-        <directionalLight position={[-4, -2, -3]} intensity={0.3} color={accent} />
+      <Canvas camera={{ position: [0, 0.4, 4.8], fov: 42 }} dpr={[1, 2]}>
+        <color attach="background" args={["#000000"]} />
+        <ambientLight intensity={0.18} />
+        <directionalLight position={[5, 2, 5]} intensity={1.6} color="#ffffff" />
         <Suspense fallback={null}>
-          <Sphere color={color} accent={accent} />
-          {hasRings && <Rings accent={accent} />}
-          <Stars radius={60} depth={40} count={2500} factor={3} fade speed={0.5} />
+          {url && <Sphere url={url} tilt={tilt} />}
+          {hasRings && <Rings />}
+          <Stars radius={80} depth={40} count={1500} factor={2.5} fade speed={0.3} />
         </Suspense>
-        <OrbitControls enablePan={false} enableZoom minDistance={3} maxDistance={8} autoRotate autoRotateSpeed={0.4} />
+        <OrbitControls
+          enablePan={false}
+          enableZoom
+          minDistance={3}
+          maxDistance={9}
+          autoRotate={autoRotate}
+          autoRotateSpeed={0.35}
+        />
       </Canvas>
     </div>
   );

@@ -147,17 +147,17 @@ export function useI18n() {
 export function LanguageToggle() {
   const { lang, setLang } = useI18n();
   return (
-    <div className="glass inline-flex items-center rounded-full p-1 text-xs font-medium">
+    <div className="chip inline-flex items-center rounded-full p-0.5 text-[11px] font-medium">
       <button
         onClick={() => setLang("ru")}
-        className={`px-3 py-1 rounded-full transition ${lang === "ru" ? "bg-white/15 text-foreground" : "text-muted-foreground hover:text-foreground"}`}
+        className={`px-2.5 py-1 rounded-full transition-colors ${lang === "ru" ? "bg-white/15 text-foreground" : "text-muted-foreground hover:text-foreground"}`}
         aria-pressed={lang === "ru"}
       >
         RU
       </button>
       <button
         onClick={() => setLang("en")}
-        className={`px-3 py-1 rounded-full transition ${lang === "en" ? "bg-white/15 text-foreground" : "text-muted-foreground hover:text-foreground"}`}
+        className={`px-2.5 py-1 rounded-full transition-colors ${lang === "en" ? "bg-white/15 text-foreground" : "text-muted-foreground hover:text-foreground"}`}
         aria-pressed={lang === "en"}
       >
         EN

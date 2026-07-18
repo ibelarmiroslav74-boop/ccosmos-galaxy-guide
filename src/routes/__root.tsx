@@ -118,7 +118,7 @@ function RootComponent() {
       <I18nProvider>
         <ClientOnly><StarField /></ClientOnly>
         <SiteHeader />
-        <main className="mx-auto max-w-7xl px-4 pt-10">
+        <main className="mx-auto max-w-6xl px-5">
           <Outlet />
         </main>
         <SiteFooter />

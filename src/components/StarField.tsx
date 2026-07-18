@@ -62,7 +62,7 @@ export function StarField({ density = 0.00018 }: { density?: number }) {
       ref={ref}
       aria-hidden
       className="pointer-events-none fixed inset-0 -z-10 h-full w-full"
-      style={{ opacity: 0.9 }}
+      style={{ opacity: 0.55 }}
     />
   );
 }

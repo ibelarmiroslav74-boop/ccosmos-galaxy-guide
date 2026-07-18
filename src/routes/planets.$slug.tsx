@@ -3,6 +3,7 @@ import { lazy } from "react";
 import { useI18n } from "@/lib/i18n";
 import { planetBySlug, planets } from "@/lib/planets-data";
 import { ClientOnly } from "@/components/ClientOnly";
+import { PlanetSphere } from "@/components/PlanetSphere";
 
 const Planet3D = lazy(() => import("@/components/Planet3D"));
 
@@ -29,9 +30,9 @@ export const Route = createFileRoute("/planets/$slug")({
   },
   component: PlanetPage,
   notFoundComponent: () => (
-    <div className="glass-strong rounded-2xl p-10 text-center">
-      <h1 className="text-2xl font-display font-semibold">Планета не найдена</h1>
-      <Link to="/planets" className="btn-ghost inline-block mt-6">← Все планеты</Link>
+    <div className="panel rounded-3xl p-16 text-center max-w-md mx-auto mt-16">
+      <h1 className="text-2xl font-semibold">Not found</h1>
+      <Link to="/planets" className="btn-ghost inline-flex mt-8">← All planets</Link>
     </div>
   ),
 });
@@ -55,53 +56,62 @@ function PlanetPage() {
   ];
 
   return (
-    <article className="space-y-10">
-      <nav className="text-sm text-muted-foreground">
-        <Link to="/planets" className="hover:text-foreground">← {t("planets.title")}</Link>
+    <article className="pb-24">
+      <nav className="pt-6 text-sm">
+        <Link to="/planets" className="text-muted-foreground hover:text-foreground transition-colors">← {t("planets.title")}</Link>
       </nav>
 
-      <header className="grid lg:grid-cols-[1fr_1.1fr] gap-8 items-center">
-        <div>
-          <div className="text-xs uppercase tracking-[0.25em] text-muted-foreground mb-3">
-            #{p.order} · {p.type[lang]}
-          </div>
-          <h1 className="font-display text-5xl sm:text-6xl font-semibold text-gradient">{p.name[lang]}</h1>
-          <p className="mt-5 text-lg text-muted-foreground leading-relaxed">{p.intro[lang]}</p>
-        </div>
+      {/* Hero */}
+      <header className="pt-16 pb-24 text-center">
+        <p className="text-[13px] uppercase tracking-[0.22em] text-muted-foreground">
+          #{p.order} · {p.type[lang]}
+        </p>
+        <h1 className="mt-5 text-6xl sm:text-8xl font-semibold tracking-[-0.04em]">{p.name[lang]}</h1>
+        <p className="mt-6 max-w-xl mx-auto text-lg sm:text-xl text-muted-foreground leading-relaxed">{p.intro[lang]}</p>
 
-        <div className="glass-strong rounded-3xl p-2 aspect-square max-w-[520px] w-full mx-auto overflow-hidden">
-          <ClientOnly fallback={<div className="h-full w-full grid place-items-center text-muted-foreground text-sm">Loading 3D…</div>}>
-            <Planet3D
-              color={p.color}
-              accent={p.accent}
-              hasRings={p.hasRings}
-              className="h-full w-full rounded-2xl overflow-hidden"
-            />
+        <div className="mt-16 mx-auto aspect-square max-w-[560px]">
+          <ClientOnly fallback={<PlanetSphere slug={p.slug} size={480} hasRings={p.hasRings} className="mx-auto" />}>
+            <Planet3D slug={p.slug} hasRings={p.hasRings} className="h-full w-full rounded-3xl overflow-hidden" />
           </ClientOnly>
         </div>
+        <p className="mt-4 text-xs uppercase tracking-widest text-muted-foreground">
+          {lang === "ru" ? "Перетаскивайте, чтобы вращать · колесо для масштаба" : "Drag to rotate · scroll to zoom"}
+        </p>
       </header>
 
-      <section className="grid sm:grid-cols-2 lg:grid-cols-4 gap-3">
+      {/* Facts */}
+      <section className="grid grid-cols-2 sm:grid-cols-4 gap-px bg-hairline rounded-3xl overflow-hidden panel">
         {facts.map(([k, v]) => (
-          <div key={k} className="glass rounded-2xl p-4">
+          <div key={k} className="bg-background p-6">
             <div className="text-[11px] uppercase tracking-widest text-muted-foreground">{k}</div>
-            <div className="text-base font-display font-semibold mt-1">{v}</div>
+            <div className="mt-2 text-lg font-medium tracking-tight">{v}</div>
           </div>
         ))}
       </section>
 
-      <section className="glass rounded-3xl p-8 prose prose-invert max-w-none">
-        <p className="text-lg leading-relaxed text-foreground/90">{p.long[lang]}</p>
+      {/* Long-form */}
+      <section className="max-w-2xl mx-auto py-24">
+        <h2 className="text-3xl sm:text-4xl font-semibold tracking-tight mb-6">
+          {lang === "ru" ? "Подробнее" : "In detail"}
+        </h2>
+        <p className="text-lg leading-relaxed text-foreground/85">{p.long[lang]}</p>
       </section>
 
-      <nav className="grid sm:grid-cols-2 gap-3">
-        <Link to="/planets/$slug" params={{ slug: prev.slug }} className="glass rounded-2xl p-4 hover:bg-white/10 transition">
-          <div className="text-xs text-muted-foreground">← {lang === "ru" ? "Предыдущая" : "Previous"}</div>
-          <div className="font-display font-semibold">{prev.name[lang]}</div>
+      {/* Prev / Next */}
+      <nav className="grid sm:grid-cols-2 gap-3 pt-6 border-t border-hairline">
+        <Link to="/planets/$slug" params={{ slug: prev.slug }} className="group flex items-center gap-4 p-5 hover:bg-white/[0.04] rounded-2xl transition-colors">
+          <PlanetSphere slug={prev.slug} size={56} hasRings={prev.hasRings} />
+          <div>
+            <div className="text-xs text-muted-foreground">← {lang === "ru" ? "Предыдущая" : "Previous"}</div>
+            <div className="font-medium">{prev.name[lang]}</div>
+          </div>
         </Link>
-        <Link to="/planets/$slug" params={{ slug: next.slug }} className="glass rounded-2xl p-4 hover:bg-white/10 transition text-right">
-          <div className="text-xs text-muted-foreground">{lang === "ru" ? "Следующая" : "Next"} →</div>
-          <div className="font-display font-semibold">{next.name[lang]}</div>
+        <Link to="/planets/$slug" params={{ slug: next.slug }} className="group flex items-center gap-4 p-5 hover:bg-white/[0.04] rounded-2xl transition-colors sm:justify-end sm:text-right">
+          <div className="sm:order-1 sm:ml-0 order-2">
+            <div className="text-xs text-muted-foreground">{lang === "ru" ? "Следующая" : "Next"} →</div>
+            <div className="font-medium">{next.name[lang]}</div>
+          </div>
+          <PlanetSphere slug={next.slug} size={56} hasRings={next.hasRings} />
         </Link>
       </nav>
     </article>
