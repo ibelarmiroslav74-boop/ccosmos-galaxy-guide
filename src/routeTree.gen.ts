@@ -9,38 +9,244 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as TimelineRouteImport } from './routes/timeline'
+import { Route as StarsRouteImport } from './routes/stars'
+import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
+import { Route as PlanetsRouteImport } from './routes/planets'
+import { Route as MissionsRouteImport } from './routes/missions'
+import { Route as MapRouteImport } from './routes/map'
+import { Route as GalaxiesRouteImport } from './routes/galaxies'
+import { Route as BlackHolesRouteImport } from './routes/black-holes'
+import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as PlanetsIndexRouteImport } from './routes/planets.index'
+import { Route as PlanetsSlugRouteImport } from './routes/planets.$slug'
 
+const TimelineRoute = TimelineRouteImport.update({
+  id: '/timeline',
+  path: '/timeline',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const StarsRoute = StarsRouteImport.update({
+  id: '/stars',
+  path: '/stars',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
+  id: '/sitemap.xml',
+  path: '/sitemap.xml',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PlanetsRoute = PlanetsRouteImport.update({
+  id: '/planets',
+  path: '/planets',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MissionsRoute = MissionsRouteImport.update({
+  id: '/missions',
+  path: '/missions',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MapRoute = MapRouteImport.update({
+  id: '/map',
+  path: '/map',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const GalaxiesRoute = GalaxiesRouteImport.update({
+  id: '/galaxies',
+  path: '/galaxies',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BlackHolesRoute = BlackHolesRouteImport.update({
+  id: '/black-holes',
+  path: '/black-holes',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AboutRoute = AboutRouteImport.update({
+  id: '/about',
+  path: '/about',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PlanetsIndexRoute = PlanetsIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => PlanetsRoute,
+} as any)
+const PlanetsSlugRoute = PlanetsSlugRouteImport.update({
+  id: '/$slug',
+  path: '/$slug',
+  getParentRoute: () => PlanetsRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
+  '/black-holes': typeof BlackHolesRoute
+  '/galaxies': typeof GalaxiesRoute
+  '/map': typeof MapRoute
+  '/missions': typeof MissionsRoute
+  '/planets': typeof PlanetsRouteWithChildren
+  '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/stars': typeof StarsRoute
+  '/timeline': typeof TimelineRoute
+  '/planets/$slug': typeof PlanetsSlugRoute
+  '/planets/': typeof PlanetsIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
+  '/black-holes': typeof BlackHolesRoute
+  '/galaxies': typeof GalaxiesRoute
+  '/map': typeof MapRoute
+  '/missions': typeof MissionsRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/stars': typeof StarsRoute
+  '/timeline': typeof TimelineRoute
+  '/planets/$slug': typeof PlanetsSlugRoute
+  '/planets': typeof PlanetsIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
+  '/black-holes': typeof BlackHolesRoute
+  '/galaxies': typeof GalaxiesRoute
+  '/map': typeof MapRoute
+  '/missions': typeof MissionsRoute
+  '/planets': typeof PlanetsRouteWithChildren
+  '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/stars': typeof StarsRoute
+  '/timeline': typeof TimelineRoute
+  '/planets/$slug': typeof PlanetsSlugRoute
+  '/planets/': typeof PlanetsIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/about'
+    | '/black-holes'
+    | '/galaxies'
+    | '/map'
+    | '/missions'
+    | '/planets'
+    | '/sitemap.xml'
+    | '/stars'
+    | '/timeline'
+    | '/planets/$slug'
+    | '/planets/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/about'
+    | '/black-holes'
+    | '/galaxies'
+    | '/map'
+    | '/missions'
+    | '/sitemap.xml'
+    | '/stars'
+    | '/timeline'
+    | '/planets/$slug'
+    | '/planets'
+  id:
+    | '__root__'
+    | '/'
+    | '/about'
+    | '/black-holes'
+    | '/galaxies'
+    | '/map'
+    | '/missions'
+    | '/planets'
+    | '/sitemap.xml'
+    | '/stars'
+    | '/timeline'
+    | '/planets/$slug'
+    | '/planets/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AboutRoute: typeof AboutRoute
+  BlackHolesRoute: typeof BlackHolesRoute
+  GalaxiesRoute: typeof GalaxiesRoute
+  MapRoute: typeof MapRoute
+  MissionsRoute: typeof MissionsRoute
+  PlanetsRoute: typeof PlanetsRouteWithChildren
+  SitemapDotxmlRoute: typeof SitemapDotxmlRoute
+  StarsRoute: typeof StarsRoute
+  TimelineRoute: typeof TimelineRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/timeline': {
+      id: '/timeline'
+      path: '/timeline'
+      fullPath: '/timeline'
+      preLoaderRoute: typeof TimelineRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/stars': {
+      id: '/stars'
+      path: '/stars'
+      fullPath: '/stars'
+      preLoaderRoute: typeof StarsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sitemap.xml': {
+      id: '/sitemap.xml'
+      path: '/sitemap.xml'
+      fullPath: '/sitemap.xml'
+      preLoaderRoute: typeof SitemapDotxmlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/planets': {
+      id: '/planets'
+      path: '/planets'
+      fullPath: '/planets'
+      preLoaderRoute: typeof PlanetsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/missions': {
+      id: '/missions'
+      path: '/missions'
+      fullPath: '/missions'
+      preLoaderRoute: typeof MissionsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/map': {
+      id: '/map'
+      path: '/map'
+      fullPath: '/map'
+      preLoaderRoute: typeof MapRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/galaxies': {
+      id: '/galaxies'
+      path: '/galaxies'
+      fullPath: '/galaxies'
+      preLoaderRoute: typeof GalaxiesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/black-holes': {
+      id: '/black-holes'
+      path: '/black-holes'
+      fullPath: '/black-holes'
+      preLoaderRoute: typeof BlackHolesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/about': {
+      id: '/about'
+      path: '/about'
+      fullPath: '/about'
+      preLoaderRoute: typeof AboutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -48,11 +254,47 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/planets/': {
+      id: '/planets/'
+      path: '/'
+      fullPath: '/planets/'
+      preLoaderRoute: typeof PlanetsIndexRouteImport
+      parentRoute: typeof PlanetsRoute
+    }
+    '/planets/$slug': {
+      id: '/planets/$slug'
+      path: '/$slug'
+      fullPath: '/planets/$slug'
+      preLoaderRoute: typeof PlanetsSlugRouteImport
+      parentRoute: typeof PlanetsRoute
+    }
   }
 }
 
+interface PlanetsRouteChildren {
+  PlanetsSlugRoute: typeof PlanetsSlugRoute
+  PlanetsIndexRoute: typeof PlanetsIndexRoute
+}
+
+const PlanetsRouteChildren: PlanetsRouteChildren = {
+  PlanetsSlugRoute: PlanetsSlugRoute,
+  PlanetsIndexRoute: PlanetsIndexRoute,
+}
+
+const PlanetsRouteWithChildren =
+  PlanetsRoute._addFileChildren(PlanetsRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AboutRoute: AboutRoute,
+  BlackHolesRoute: BlackHolesRoute,
+  GalaxiesRoute: GalaxiesRoute,
+  MapRoute: MapRoute,
+  MissionsRoute: MissionsRoute,
+  PlanetsRoute: PlanetsRouteWithChildren,
+  SitemapDotxmlRoute: SitemapDotxmlRoute,
+  StarsRoute: StarsRoute,
+  TimelineRoute: TimelineRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
