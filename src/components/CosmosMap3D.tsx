@@ -2,6 +2,8 @@ import { Suspense, useMemo, useRef, useState } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { OrbitControls, Stars, Html } from "@react-three/drei";
 import type { Group } from "three";
+import { WebGLBoundary } from "@/components/WebGLBoundary";
+
 
 interface Node {
   name: string;
