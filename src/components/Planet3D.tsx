@@ -1,8 +1,9 @@
 import { Suspense, useRef } from "react";
 import { Canvas, useFrame, useLoader } from "@react-three/fiber";
-import { OrbitControls, Stars } from "@react-three/drei";
+import { OrbitControls, Stars, Html } from "@react-three/drei";
 import { TextureLoader, DoubleSide, SRGBColorSpace, type Mesh } from "three";
 import { planetTextures, saturnRingTexture } from "@/lib/planet-textures";
+import { Loader } from "@/components/Loader";
 
 interface Props {
   slug: string;
@@ -51,7 +52,7 @@ export function Planet3D({ slug, hasRings, className, autoRotate = true }: Props
         <color attach="background" args={["#000000"]} />
         <ambientLight intensity={0.18} />
         <directionalLight position={[5, 2, 5]} intensity={1.6} color="#ffffff" />
-        <Suspense fallback={null}>
+        <Suspense fallback={<Html center><Loader label="Loading" /></Html>}>
           {url && <Sphere url={url} tilt={tilt} />}
           {hasRings && <Rings />}
           <Stars radius={80} depth={40} count={1500} factor={2.5} fade speed={0.3} />

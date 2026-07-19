@@ -1,7 +1,14 @@
-import { useEffect, useState, type ReactNode } from "react";
+import { Suspense, useEffect, useState, type ReactNode } from "react";
 
-export function ClientOnly({ children, fallback = null }: { children: ReactNode; fallback?: ReactNode }) {
+export function ClientOnly({
+  children,
+  fallback = null,
+}: {
+  children: ReactNode;
+  fallback?: ReactNode;
+}) {
   const [ready, setReady] = useState(false);
   useEffect(() => setReady(true), []);
-  return <>{ready ? children : fallback}</>;
+  if (!ready) return <>{fallback}</>;
+  return <Suspense fallback={fallback}>{children}</Suspense>;
 }
