@@ -68,32 +68,53 @@ function Node({ n, onSelect }: { n: Node; onSelect: (n: Node) => void }) {
 export function CosmosMap3D({ className }: { className?: string }) {
   const [selected, setSelected] = useState<Node | null>(null);
   const nodes = useMemo(() => NODES, []);
-  return (
+  const fallback = (
     <div className={className}>
-      <Canvas camera={{ position: [0, 3, 12], fov: 55 }} dpr={[1, 2]}>
-        <color attach="background" args={["#05070f"]} />
-        <ambientLight intensity={0.4} />
-        <Suspense fallback={null}>
-          <Stars radius={120} depth={80} count={8000} factor={5} fade speed={0.4} />
-          {nodes.map((n) => (
-            <Node key={n.name} n={n} onSelect={setSelected} />
-          ))}
-        </Suspense>
-        <OrbitControls enablePan enableZoom minDistance={3} maxDistance={40} autoRotate autoRotateSpeed={0.15} />
-      </Canvas>
-      {selected && (
-        <div className="absolute bottom-4 left-4 right-4 sm:right-auto sm:max-w-sm glass-strong rounded-2xl p-4 z-10">
-          <div className="flex items-start justify-between gap-3">
-            <div>
-              <div className="text-xs uppercase tracking-widest text-muted-foreground">{selected.type}</div>
-              <div className="text-lg font-display font-semibold text-gradient">{selected.name}</div>
-            </div>
-            <button onClick={() => setSelected(null)} className="text-muted-foreground hover:text-foreground text-lg leading-none">×</button>
-          </div>
+      <div className="h-full w-full grid place-items-center bg-black text-center p-6">
+        <div>
+          <div className="text-sm uppercase tracking-widest text-muted-foreground">3D unavailable</div>
+          <p className="mt-3 text-sm text-muted-foreground max-w-sm">
+            Ваше устройство не поддерживает WebGL или он отключён.<br />
+            Your device doesn't support WebGL or it's disabled.
+          </p>
         </div>
-      )}
+      </div>
     </div>
   );
+
+  return (
+    <WebGLBoundary fallback={fallback}>
+      <div className={className}>
+        <Canvas
+          camera={{ position: [0, 3, 12], fov: 55 }}
+          dpr={[1, 2]}
+          gl={{ failIfMajorPerformanceCaveat: false, powerPreference: "default" }}
+        >
+          <color attach="background" args={["#05070f"]} />
+          <ambientLight intensity={0.4} />
+          <Suspense fallback={null}>
+            <Stars radius={120} depth={80} count={8000} factor={5} fade speed={0.4} />
+            {nodes.map((n) => (
+              <Node key={n.name} n={n} onSelect={setSelected} />
+            ))}
+          </Suspense>
+          <OrbitControls enablePan enableZoom minDistance={3} maxDistance={40} autoRotate autoRotateSpeed={0.15} />
+        </Canvas>
+        {selected && (
+          <div className="absolute bottom-4 left-4 right-4 sm:right-auto sm:max-w-sm panel rounded-2xl p-4 z-10">
+            <div className="flex items-start justify-between gap-3">
+              <div>
+                <div className="text-xs uppercase tracking-widest text-muted-foreground">{selected.type}</div>
+                <div className="text-lg font-semibold">{selected.name}</div>
+              </div>
+              <button onClick={() => setSelected(null)} className="text-muted-foreground hover:text-foreground text-lg leading-none">×</button>
+            </div>
+          </div>
+        )}
+      </div>
+    </WebGLBoundary>
+  );
 }
+
 
 export default CosmosMap3D;
