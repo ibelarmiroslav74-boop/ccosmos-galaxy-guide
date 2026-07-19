@@ -4,6 +4,9 @@ import { OrbitControls, Stars, Html } from "@react-three/drei";
 import { TextureLoader, DoubleSide, SRGBColorSpace, type Mesh } from "three";
 import { planetTextures, saturnRingTexture } from "@/lib/planet-textures";
 import { Loader } from "@/components/Loader";
+import { PlanetSphere } from "@/components/PlanetSphere";
+import { WebGLBoundary } from "@/components/WebGLBoundary";
+
 
 interface Props {
   slug: string;
@@ -46,28 +49,43 @@ export function Planet3D({ slug, hasRings, className, autoRotate = true }: Props
   const url = planetTextures[slug];
   const tilt = slug === "uranus" ? Math.PI / 2 : slug === "earth" ? 0.41 : 0.15;
 
-  return (
+  const fallback = (
     <div className={className}>
-      <Canvas camera={{ position: [0, 0.4, 4.8], fov: 42 }} dpr={[1, 2]}>
-        <color attach="background" args={["#000000"]} />
-        <ambientLight intensity={0.18} />
-        <directionalLight position={[5, 2, 5]} intensity={1.6} color="#ffffff" />
-        <Suspense fallback={<Html center><Loader label="Loading" /></Html>}>
-          {url && <Sphere url={url} tilt={tilt} />}
-          {hasRings && <Rings />}
-          <Stars radius={80} depth={40} count={1500} factor={2.5} fade speed={0.3} />
-        </Suspense>
-        <OrbitControls
-          enablePan={false}
-          enableZoom
-          minDistance={3}
-          maxDistance={9}
-          autoRotate={autoRotate}
-          autoRotateSpeed={0.35}
-        />
-      </Canvas>
+      <div className="h-full w-full grid place-items-center bg-black rounded-3xl">
+        <PlanetSphere slug={slug} size={420} hasRings={hasRings} />
+      </div>
     </div>
+  );
+
+  return (
+    <WebGLBoundary fallback={fallback}>
+      <div className={className}>
+        <Canvas
+          camera={{ position: [0, 0.4, 4.8], fov: 42 }}
+          dpr={[1, 2]}
+          gl={{ failIfMajorPerformanceCaveat: false, powerPreference: "default" }}
+        >
+          <color attach="background" args={["#000000"]} />
+          <ambientLight intensity={0.18} />
+          <directionalLight position={[5, 2, 5]} intensity={1.6} color="#ffffff" />
+          <Suspense fallback={<Html center><Loader label="Loading" /></Html>}>
+            {url && <Sphere url={url} tilt={tilt} />}
+            {hasRings && <Rings />}
+            <Stars radius={80} depth={40} count={1500} factor={2.5} fade speed={0.3} />
+          </Suspense>
+          <OrbitControls
+            enablePan={false}
+            enableZoom
+            minDistance={3}
+            maxDistance={9}
+            autoRotate={autoRotate}
+            autoRotateSpeed={0.35}
+          />
+        </Canvas>
+      </div>
+    </WebGLBoundary>
   );
 }
 
 export default Planet3D;
+
