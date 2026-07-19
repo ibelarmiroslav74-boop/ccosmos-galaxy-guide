@@ -20,12 +20,12 @@ import { ClientOnly } from "@/components/ClientOnly";
 function NotFoundComponent() {
   return (
     <div className="flex min-h-[70vh] items-center justify-center px-4">
-      <div className="glass-strong max-w-md rounded-3xl p-10 text-center">
-        <div className="mx-auto mb-4 h-16 w-16 rounded-full bg-gradient-to-br from-[color:var(--accent)] to-[color:var(--nebula)] animate-float-slow" />
-        <h1 className="text-3xl font-display font-semibold text-gradient">404</h1>
-        <p className="mt-2 text-sm text-muted-foreground">Lost in space · Потерялись в космосе</p>
-        <div className="mt-6">
-          <Link to="/" className="btn-primary inline-block">Go home / На главную</Link>
+      <div className="panel max-w-md rounded-3xl p-12 text-center">
+        <div className="text-[13px] uppercase tracking-[0.22em] text-muted-foreground">404</div>
+        <h1 className="mt-4 text-4xl font-semibold tracking-tight">Lost in space</h1>
+        <p className="mt-3 text-sm text-muted-foreground">Потерялись в космосе — такой страницы нет в наблюдаемой Вселенной.</p>
+        <div className="mt-8">
+          <Link to="/" className="btn-primary inline-block">На главную · Go home</Link>
         </div>
       </div>
     </div>
@@ -41,17 +41,18 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
 
   return (
     <div className="flex min-h-[70vh] items-center justify-center px-4">
-      <div className="glass-strong max-w-md rounded-3xl p-10 text-center">
-        <h1 className="text-xl font-semibold">Что-то пошло не так</h1>
-        <p className="mt-2 text-sm text-muted-foreground">Something went wrong. Try again.</p>
-        <div className="mt-6 flex justify-center gap-2">
+      <div className="panel max-w-md rounded-3xl p-12 text-center">
+        <div className="text-[13px] uppercase tracking-[0.22em] text-muted-foreground">Error</div>
+        <h1 className="mt-4 text-2xl font-semibold tracking-tight">Что-то пошло не так</h1>
+        <p className="mt-3 text-sm text-muted-foreground">Something went wrong while loading this view.</p>
+        <div className="mt-8 flex justify-center gap-2">
           <button
             onClick={() => { router.invalidate(); reset(); }}
             className="btn-primary"
           >
-            Retry
+            Попробовать снова
           </button>
-          <a href="/" className="btn-ghost">Home</a>
+          <a href="/" className="btn-ghost">На главную</a>
         </div>
       </div>
     </div>
