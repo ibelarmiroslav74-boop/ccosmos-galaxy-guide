@@ -4,6 +4,9 @@ import { OrbitControls, Stars, Html } from "@react-three/drei";
 import { TextureLoader, DoubleSide, SRGBColorSpace, type Mesh } from "three";
 import { planetTextures, saturnRingTexture } from "@/lib/planet-textures";
 import { Loader } from "@/components/Loader";
+import { PlanetSphere } from "@/components/PlanetSphere";
+import { WebGLBoundary } from "@/components/WebGLBoundary";
+
 
 interface Props {
   slug: string;
