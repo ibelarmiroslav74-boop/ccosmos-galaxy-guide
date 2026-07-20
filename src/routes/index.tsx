@@ -73,7 +73,7 @@ function Home() {
               className="group text-center"
             >
               <div className="mx-auto mb-6 aspect-square max-w-[180px]">
-                <PlanetSphere slug={p.slug} size={180} hasRings={p.hasRings} className="transition-transform duration-500 group-hover:scale-105" />
+                <PlanetSphere slug={p.slug} size={180} className="transition-transform duration-500 group-hover:scale-105" />
               </div>
               <div className="text-[11px] uppercase tracking-widest text-muted-foreground">#{p.order}</div>
               <div className="mt-1 text-lg font-medium">{p.name[lang]}</div>

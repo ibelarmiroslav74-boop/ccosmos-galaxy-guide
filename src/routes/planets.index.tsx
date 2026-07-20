@@ -37,7 +37,7 @@ function PlanetsIndex() {
             className="group text-center panel rounded-3xl p-8 hover:bg-white/[0.05] transition-colors"
           >
             <div className="mx-auto aspect-square max-w-[220px] mb-6">
-              <PlanetSphere slug={p.slug} size={220} hasRings={p.hasRings} className="transition-transform duration-500 group-hover:scale-105" />
+              <PlanetSphere slug={p.slug} size={220} className="transition-transform duration-500 group-hover:scale-105" />
             </div>
             <div className="text-[11px] uppercase tracking-widest text-muted-foreground">
               #{p.order} · {p.type[lang]}
