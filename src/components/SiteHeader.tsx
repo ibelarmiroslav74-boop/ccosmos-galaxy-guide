@@ -91,19 +91,21 @@ export function SiteHeader() {
         </div>
 
         {open && (
-          <div className="lg:hidden mx-auto max-w-6xl mt-2 panel rounded-2xl animate-fade-in">
-            <div className="px-3 py-2 grid grid-cols-2 gap-1 text-sm">
-              {NAV.map((n) => (
-                <Link
-                  key={n.to}
-                  to={n.to}
-                  onClick={() => setOpen(false)}
-                  className="px-3 py-2.5 rounded-xl text-muted-foreground hover:text-foreground hover:bg-white/[0.04] transition-colors"
-                  activeProps={{ className: "text-foreground bg-white/[0.04]" }}
-                >
-                  {t(n.key)}
-                </Link>
-              ))}
+          <div className="lg:hidden absolute left-0 right-0 px-3 mt-2">
+            <div className="mx-auto max-w-6xl panel rounded-2xl animate-fade-in shadow-xl">
+              <div className="px-3 py-2 grid grid-cols-2 gap-1 text-sm">
+                {NAV.map((n) => (
+                  <Link
+                    key={n.to}
+                    to={n.to}
+                    onClick={() => setOpen(false)}
+                    className="px-3 py-2.5 rounded-xl text-muted-foreground hover:text-foreground hover:bg-white/[0.04] transition-colors"
+                    activeProps={{ className: "text-foreground bg-white/[0.04]" }}
+                  >
+                    {t(n.key)}
+                  </Link>
+                ))}
+              </div>
             </div>
           </div>
         )}
