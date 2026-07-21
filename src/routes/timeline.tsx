@@ -28,21 +28,21 @@ export const Route = createFileRoute("/timeline")({
 function Timeline() {
   const { t, lang } = useI18n();
   return (
-    <div>
-      <header className="mb-10">
-        <h1 className="font-display text-4xl sm:text-5xl font-semibold text-gradient">{t("timeline.title")}</h1>
-        <p className="text-muted-foreground mt-3 max-w-2xl">{t("timeline.sub")}</p>
+    <div className="py-16 sm:py-24 space-y-16">
+      <header className="max-w-3xl">
+        <p className="text-[13px] uppercase tracking-[0.22em] text-muted-foreground mb-4">
+          {lang === "ru" ? "13.8 миллиардов лет" : "13.8 billion years"}
+        </p>
+        <h1 className="text-5xl sm:text-6xl font-semibold tracking-tight">{t("timeline.title")}</h1>
+        <p className="text-muted-foreground mt-6 max-w-xl text-lg leading-relaxed">{t("timeline.sub")}</p>
       </header>
+
       <div className="grid md:grid-cols-2 gap-4">
         {ERAS.map((e, i) => (
-          <div key={i} className="glass rounded-2xl p-6 relative overflow-hidden">
-            <div className="absolute -bottom-16 -right-16 h-40 w-40 rounded-full blur-3xl opacity-30"
-              style={{ background: `hsl(${(i * 40) % 360}, 90%, 65%)` }} />
-            <div className="relative">
-              <div className="text-xs uppercase tracking-widest text-muted-foreground">{e.t}</div>
-              <h3 className="font-display text-2xl font-semibold mt-1">{lang === "ru" ? e.ru : e.en}</h3>
-              <p className="text-sm text-foreground/85 mt-3">{lang === "ru" ? e.d_ru : e.d_en}</p>
-            </div>
+          <div key={i} className="panel rounded-2xl p-7">
+            <div className="text-[11px] uppercase tracking-widest text-muted-foreground tabular-nums">{e.t}</div>
+            <h3 className="text-2xl font-semibold mt-2 tracking-tight">{lang === "ru" ? e.ru : e.en}</h3>
+            <p className="text-sm text-muted-foreground mt-3 leading-relaxed">{lang === "ru" ? e.d_ru : e.d_en}</p>
           </div>
         ))}
       </div>
