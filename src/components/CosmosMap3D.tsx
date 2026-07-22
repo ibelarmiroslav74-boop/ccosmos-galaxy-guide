@@ -323,14 +323,16 @@ export function CosmosMap3D({ className }: { className?: string }) {
           />
         </Canvas>
 
-        {/* Top HUD — scale selector */}
-        <div className="pointer-events-none absolute inset-x-0 top-0 z-10 flex justify-center p-3 sm:p-4">
-          <div className="pointer-events-auto flex flex-wrap items-center gap-1 rounded-full border border-white/10 bg-black/55 p-1 backdrop-blur">
+        {/* Top HUD — scale selector (horizontally scrollable on tiny screens) */}
+        <div className="pointer-events-none absolute inset-x-0 top-0 z-10 flex justify-center p-2 sm:p-4">
+          <div
+            className="pointer-events-auto flex max-w-full items-center gap-1 overflow-x-auto rounded-full border border-white/10 bg-black/60 p-1 backdrop-blur-md [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+          >
             {SCALES.map((s) => (
               <button
                 key={s.id}
                 onClick={() => setScale(s.id)}
-                className={`rounded-full px-3 py-1.5 text-[11px] uppercase tracking-[0.16em] transition ${
+                className={`shrink-0 rounded-full px-3 py-1.5 text-[11px] uppercase tracking-[0.14em] transition ${
                   scale === s.id
                     ? "bg-white text-black"
                     : "text-white/70 hover:text-white"
@@ -342,8 +344,8 @@ export function CosmosMap3D({ className }: { className?: string }) {
           </div>
         </div>
 
-        {/* Bottom-left legend */}
-        <div className="pointer-events-none absolute left-3 bottom-3 sm:left-4 sm:bottom-4 z-10">
+        {/* Bottom scale hint — desktop only (mobile has the pills up top) */}
+        <div className="pointer-events-none absolute left-4 bottom-4 z-10 hidden sm:block">
           <div className="rounded-lg border border-white/10 bg-black/55 px-3 py-2 backdrop-blur">
             <div className="text-[10px] uppercase tracking-[0.22em] text-white/50">Scale</div>
             <div className="text-sm text-white">{activeScale.en}</div>
@@ -351,36 +353,39 @@ export function CosmosMap3D({ className }: { className?: string }) {
           </div>
         </div>
 
-        {/* Top-right hint */}
+        {/* Desktop hint */}
         <div className="pointer-events-none absolute right-3 top-16 z-10 hidden sm:block">
-          <div className="rounded-lg border border-white/10 bg-black/50 px-3 py-2 text-[11px] text-white/60 backdrop-blur max-w-[220px] leading-relaxed">
-            Drag to orbit · scroll to zoom · click any object to focus and read details.
+          <div className="max-w-[220px] rounded-lg border border-white/10 bg-black/50 px-3 py-2 text-[11px] leading-relaxed text-white/60 backdrop-blur">
+            Drag to orbit · scroll to zoom · tap any object to focus.
           </div>
         </div>
 
-        {/* Info panel */}
+        {/* Info panel — bottom sheet on mobile, card on desktop */}
         {selected && (
-          <div className="absolute bottom-3 right-3 sm:bottom-4 sm:right-4 z-10 w-[calc(100%-1.5rem)] sm:w-[340px]">
-            <div className="rounded-2xl border border-white/10 bg-black/70 p-4 backdrop-blur-md">
+          <div
+            className="absolute inset-x-0 bottom-0 z-10 px-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] sm:inset-x-auto sm:right-4 sm:bottom-4 sm:w-[340px] sm:px-0 sm:pb-0"
+          >
+            <div className="rounded-t-2xl border border-white/10 border-b-0 bg-black/80 p-4 backdrop-blur-md sm:rounded-2xl sm:border-b">
+              <div className="mx-auto mb-3 h-1 w-10 rounded-full bg-white/20 sm:hidden" />
               <div className="flex items-start justify-between gap-3">
-                <div>
+                <div className="min-w-0">
                   <div className="text-[10px] uppercase tracking-[0.22em] text-white/50">{selected.type}</div>
-                  <div className="text-lg font-semibold text-white leading-tight">{selected.name}</div>
+                  <div className="truncate text-lg font-semibold leading-tight text-white">{selected.name}</div>
                 </div>
                 <button
                   onClick={() => { setSelected(null); setFocus(null); }}
-                  className="text-white/50 hover:text-white text-xl leading-none"
+                  className="shrink-0 rounded-full border border-white/10 px-2 text-lg leading-none text-white/60 hover:text-white"
                   aria-label="Close"
                 >
                   ×
                 </button>
               </div>
-              <div className="mt-3 flex items-center gap-2 text-[11px] text-white/60">
+              <div className="mt-3 flex flex-wrap items-center gap-2 text-[11px] text-white/60">
                 <span className="rounded-full border border-white/10 px-2 py-0.5">{selected.distance}</span>
                 <span className="rounded-full border border-white/10 px-2 py-0.5 capitalize">{selected.scale}</span>
               </div>
-              <p className="mt-3 text-sm text-white/75 leading-relaxed">{selected.desc_en}</p>
-              <p className="mt-1 text-sm text-white/50 leading-relaxed">{selected.desc_ru}</p>
+              <p className="mt-3 text-sm leading-relaxed text-white/80">{selected.desc_en}</p>
+              <p className="mt-1 text-sm leading-relaxed text-white/55">{selected.desc_ru}</p>
             </div>
           </div>
         )}
