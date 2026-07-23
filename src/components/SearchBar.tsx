@@ -59,7 +59,7 @@ export function SearchBar({ onClose }: Props) {
         const res = await callAiSearch({ data: { query, lang } });
         if (myId !== reqIdRef.current) return;
         const idMap = new Map(allSearchItems.map((i) => [i.id, i]));
-        const extra = res.ids.map((id) => idMap.get(id)).filter((x): x is SearchItem => !!x);
+        const extra = res.ids.map((id: string) => idMap.get(id)).filter((x: SearchItem | undefined): x is SearchItem => !!x);
         setAi({ loading: false, answer: res.answer, extra });
       } catch {
         if (myId !== reqIdRef.current) return;
